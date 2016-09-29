@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShoppingCart {
 	
@@ -35,10 +36,28 @@ public class ShoppingCart {
 
 	private BigDecimal calculateTotalPrice() {
 		BigDecimal totalPrice = BigDecimal.ZERO;
-		for(Item item : items) {
-            totalPrice = totalPrice.add(item.getPrice());
-		}
-		return totalPrice.setScale(2, RoundingMode.CEILING);
+		
+		List<Item> listOfApple = listOf(ItemType.APPLE);
+		List<Item> listOfOranges = listOf(ItemType.ORANGE);
+		
+		DiscountStategy twoForOne = new BuyOneGetOneFreeStrategy();
+		BigDecimal discountOnApples = twoForOne.calculateDiscount(listOfApple, ItemType.APPLE);
+		
+		DiscountStategy threeForTwo = new ThreeForTwoStrategy();
+		BigDecimal discountOnOranges = threeForTwo.calculateDiscount(listOfOranges, ItemType.ORANGE);
+		
+		BigDecimal totalPriceForApples = new BigDecimal(listOfApple.size()).multiply(ItemType.APPLE.getUnitPrice()).subtract(discountOnApples);
+		BigDecimal totalPriceForOranges = new BigDecimal(listOfOranges.size()).multiply(ItemType.ORANGE.getUnitPrice()).subtract(discountOnOranges);
+		totalPrice = totalPriceForApples.add(totalPriceForOranges).setScale(2, RoundingMode.CEILING);
+		return totalPrice;
+		
+	}
+	
+	
+	private List<Item> listOf(ItemType type) {
+		
+		List<Item> listOfProdcutByType = items.stream().filter(item -> item.getName().equals(type.getDescription())).collect(Collectors.toList());
+		return listOfProdcutByType;
 	}
 
 }

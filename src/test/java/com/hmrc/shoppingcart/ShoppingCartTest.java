@@ -62,7 +62,7 @@ public class ShoppingCartTest {
 		ShoppingCart cart = new ShoppingCart();
 		cart.addItems(new Item(ItemType.APPLE.getDescription()));
 		cart.addItems(new Item(ItemType.APPLE.getDescription()));
-		Assert.assertEquals(new BigDecimal(1.20).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		Assert.assertEquals(new BigDecimal(.60).setScale(2, RoundingMode.CEILING),  cart.checkout());
 		
 	}
 	
@@ -72,7 +72,7 @@ public class ShoppingCartTest {
 		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
 		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
 		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
-		Assert.assertEquals(new BigDecimal(.75).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		Assert.assertEquals(new BigDecimal(.50).setScale(2, RoundingMode.CEILING),  cart.checkout());
 		
 	}
 	
@@ -83,7 +83,65 @@ public class ShoppingCartTest {
 		cart.addItems(new Item(ItemType.APPLE.getDescription()));
 		cart.addItems(new Item(ItemType.APPLE.getDescription()));
 		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
-		Assert.assertEquals(new BigDecimal(2.05).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		Assert.assertEquals(new BigDecimal(1.45).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		
+	}
+	
+	@Test
+	public void given_empty_cart_then_calculate_price() {
+		ShoppingCart cart = new ShoppingCart();
+		Assert.assertEquals(new BigDecimal(0),  cart.checkout());
+		
+	}
+	
+	@Test
+	public void given_buy_one_get_one_on_apples_and_two_apples_in_cart_then_calculate_price() {
+		ShoppingCart cart = new ShoppingCart();
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		Assert.assertEquals(new BigDecimal(.60).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		
+	}
+	
+	@Test
+	public void given_buy_one_get_one_on_apples_and_three_apples_in_cart_then_calculate_price() {
+		ShoppingCart cart = new ShoppingCart();
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		Assert.assertEquals(new BigDecimal(1.20).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		
+	}
+	
+	
+	@Test
+	public void given_three_for_two_on_oranges_and_two_oranges_in_cart_then_calculate_price() {
+		ShoppingCart cart = new ShoppingCart();
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		Assert.assertEquals(new BigDecimal(.50).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		
+	}
+	
+	@Test
+	public void given_three_for_two_on_oranges_and_three_oranges_in_cart_then_calculate_price() {
+		ShoppingCart cart = new ShoppingCart();
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		Assert.assertEquals(new BigDecimal(.50).setScale(2, RoundingMode.CEILING),  cart.checkout());
+		
+	}
+	
+	@Test
+	public void given_two_apples_and_three_oranges_in_cart_then_calculate_price() {
+		ShoppingCart cart = new ShoppingCart();
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		cart.addItems(new Item(ItemType.APPLE.getDescription()));
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		cart.addItems(new Item(ItemType.ORANGE.getDescription()));
+		Assert.assertEquals(new BigDecimal(1.10).setScale(2, RoundingMode.DOWN),  cart.checkout());
 		
 	}
 
